@@ -9,6 +9,7 @@
 
     <div class="clock">
       <div class="clock-face">
+        <div class="hand time"></div>
         <div class="hand hour-hand"></div>
         <div class="hand min-hand"></div>
         <div class="hand second-hand"></div>
@@ -62,13 +63,60 @@
       background: black;
       position: absolute;
       top: 50%;
+      transform-origin: 100%;
+      transform: rotate(90deg);
+      transition: all 0.05s;
+    }
+
+    .hour-hand{
+      background-color: red;
+    }
+
+    .min-hand{
+      background-color: lightblue;
+    }
+
+    .hand.time{
+      transform: none;
+      transform: translateX(50%);
+      font-size: 5rem;
+      z-index: 3;
+      text-align: center;
+      background: none;
+      font-weight: bold;
     }
 
   </style>
 
   <script>
+    const secondHand = document.querySelector(".second-hand");
+    const minsHand = document.querySelector(".min-hand");
+    const hoursHand = document.querySelector(".hour-hand");
+    const timeHand = document.querySelector(".time");
 
+    function setDate(){
+      const now = new Date();
 
+      const seconds = now.getSeconds();
+      const secondsDegrees = ((seconds / 60) * 360) + 90;
+      secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+    
+      const mins = now.getMinutes();
+      const minsDegrees = ((mins / 60) * 360) + 90;
+      minsHand.style.transform = `rotate(${minsDegrees}deg)`;
+    
+      const hours = now.getHours();
+      const hoursDegrees = ((mins / 12) * 360) + 90;
+      hoursHand.style.transform = `rotate(${hoursDegrees}deg)`;
+      if (seconds === 0 || seconds < 10) {
+        timeHand.innerHTML = `${hours}:${mins}:0${seconds}`;
+      }
+      else if (seconds >= 10) {
+        timeHand.innerHTML = `${hours}:${mins}:${seconds}`;
+      }
+    }
+
+    setInterval(setDate, 1000);
   </script>
 </body>
 </html>
